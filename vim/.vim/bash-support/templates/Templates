@@ -1,0 +1,19 @@
+
+§ =============================================================
+§ ========== USER MACROS ======================================
+§ =============================================================
+§
+|AUTHOR|       = Josh Boon 
+|AUTHORREF|    = jcb
+|EMAIL|        = josh@hungryfishmedia.com, j@80ok.be
+|ORGANIZATION| = Hungry Fish Media, LLC
+|COPYRIGHT|    = Copyright (c) |YEAR|, |AUTHOR|
+§
+§ =============================================================
+§ ========== FILE INCLUDES ====================================
+§ =============================================================
+§
+|includefile| = bash.comments.template
+|includefile| = bash.statements.template
+|includefile| = bash.paramsub.template
+§
