@@ -1,0 +1,25 @@
+startup_message off
+termcapinfo rxvt-unicode ti@:te@
+terminfo rxvt-unicode ti@:te@:
+term screen-256color
+setenv LC_CTYPE en_US.UTF-8
+defutf8 on
+setenv DISPLAY ':0'
+nonblock on
+vbell off
+msgwait 10
+screen    -t $         1
+screen    -t $         2
+screen    -t $         3
+screen    -t htop      4 sudo htop
+screen    -t iotop     5 iotop
+screen    -t mysql     6 sudo mysql
+screen    -t log       7 tail -f /var/log/syslog /var/log/messages /var/log/secure /var/log/auth.log
+select 1
+bind = resize =
+bind + resize +1
+bind - resize -1
+bind _ resize max
+bind 0 select 10
+hardstatus on
+hardstatus alwayslastline '%{wk}[ %{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{W}%n*%f %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}][%{Y}%l%{g}]%{=b C}[ %m/%d %c ]%{W}'

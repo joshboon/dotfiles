@@ -1,0 +1,841 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+# don't put duplicate lines in the history. See bash(1) for more options
+# ... or force ignoredups and ignorespace
+HISTCONTROL=ignoredups:ignorespace
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+# handle small spelling errors
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTFILESIZE=1000000000
+HISTSIZE=1000000
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# make less more friendly for non-text input files, see lesspipe(1)
+# [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+# if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+    # debian_chroot=$(cat /etc/debian_chroot)
+# fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+# case "$TERM" in
+    # xterm-color) color_prompt=yes;;
+# esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+#force_color_prompt=yes
+
+# if [ -n "$force_color_prompt" ]; then
+    # if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	# color_prompt=yes
+    # else
+	# color_prompt=
+    # fi
+# fi
+
+# if [ "$color_prompt" = yes ]; then
+    # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+# else
+    # PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+# fi
+# unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+# case "$TERM" in
+# xterm*|rxvt*)
+    # PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    # ;;
+# *)
+    # ;;
+# esac
+
+# enable color support of ls and also add handy aliases
+# if [ -x /usr/bin/dircolors ]; then
+    # test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    # alias dir='dir --color=auto'
+    # alias vdir='vdir --color=auto'
+
+    # alias grep='grep --color=auto'
+    # alias fgrep='fgrep --color=auto'
+    # alias egrep='egrep --color=auto'
+# fi
+
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+# if [ -f ~/.bash_aliases ]; then
+    # . ~/.bash_aliases
+# fi
+#Set up distro specific install commands and set distro variables
+distro=$(cat /etc/issue | sed -n ' 1 p '| cut -d" " -f1)
+if [ "$distro" = "Ubuntu" ]
+        then
+				echo "Setting up for a Ubuntu shell..."
+                searchcommand='aptitude search'
+				installcommand='apt-get -y install'
+				uninstallcommand='apt-get purge'
+        else
+                if [ "$distro" = "Fedora" ]
+                        then
+								echo "Setting up for a Mandriva shell..."
+                                searchcommand='yum search'
+                                installcommand='yum install '
+		fi
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
+function get_xserver ()
+{
+    case $TERM in
+       xterm )
+            XSERVER=$(who am i | awk '{print $NF}' | tr -d ')''(' ) 
+            # Ane-Pieter Wieringa suggests the following alternative:
+            # I_AM=$(who am i)
+            # SERVER=${I_AM#*(}
+            # SERVER=${SERVER%*)}
+
+            XSERVER=${XSERVER%%:*}
+            ;;
+        aterm | rxvt)
+        # Find some code that works here. ...
+            ;;
+    esac  
+}
+
+if [ -z ${DISPLAY:=""} ]; then
+    get_xserver
+    if [[ -z ${XSERVER}  || ${XSERVER} == $(hostname) || \
+      ${XSERVER} == "unix" ]]; then 
+        DISPLAY=":0.0"          # Display on local host.
+    else
+        DISPLAY=${XSERVER}:0.0  # Display on remote host.
+    fi
+fi
+
+export DISPLAY
+PATH=$PATH:/usr/local/scripts
+export PATH
+#-------------------------------------------------------------
+# Some settings
+#-------------------------------------------------------------
+
+ulimit -S -c 0          # Don't want any coredumps.
+set -o notify
+set -o noclobber
+set -o ignoreeof
+#set -o xtrace          # Useful for debuging.
+
+# Enable options:
+shopt -s cdspell
+shopt -s cdable_vars
+shopt -s checkhash
+shopt -s checkwinsize
+shopt -s hostcomplete
+shopt -s sourcepath
+shopt -s no_empty_cmd_completion
+shopt -s cmdhist
+shopt -s histappend histreedit histverify
+shopt -s extglob        # Necessary for programmable completion.
+
+# Disable options:
+shopt -u mailwarn
+unset MAILCHECK         # Don\'t want my shell to warn me of incoming mail.
+# Grab ssh-agent if available
+. ~/ssh-agent 2>/dev/null
+
+export TIMEFORMAT=$'\nreal %3R\tuser %3U\tsys %3S\tpcpu %P\n'
+export HISTTIMEFORMAT="%H:%M > "
+export HISTIGNORE="&:bg:fg:ll:h"
+export HOSTFILE=$HOME/.hosts    # Put list of remote hosts in ~/.hosts ...
+export HOST=$HOSTNAME
+export GPGKEY=86A7BB5D
+export LPDEST=MFC-8480DN
+export EDITOR=vim
+export DEBFULLNAME="Josh Boon"
+export DEBEMAIL="alwayscurious@joshboon.com"
+#-------------------------------------------------------------
+# Greeting, motd etc...
+#-------------------------------------------------------------
+
+# Define some colors first:
+red='\e[0;31m'
+RED='\e[1;31m'
+blue='\e[0;34m'
+BLUE='\e[1;34m'
+cyan='\e[0;36m'
+CYAN='\e[1;36m'
+NC='\e[0m'              # No Color
+# --> Nice. Has the same effect as using "ansi.sys" in DOS.
+
+
+# Looks best on a terminal with black background.....
+echo -e "${CYAN}This is BASH ${RED}${BASH_VERSION%.*}\
+${CYAN} - DISPLAY on ${RED}$DISPLAY${NC}\n"
+date
+if [ -x /usr/games/fortune ]; then
+    /usr/games/fortune   10%ubuntu-server-tips cookie definitions 10%riddles 10%off fortunes 7%riddles 7%linux 7%humorists 10%eo 5%men-women 7%wisdom 5%work 5%knghtbrd     # Makes our day a bit more fun.... :-)
+fi
+
+function _exit()        # Function to run upon exit of shell.
+{
+    echo -e "${RED}Elvis has left the building...${NC}"
+}
+trap _exit EXIT
+
+
+#-------------------------------------------------------------
+# Shell Prompt
+#-------------------------------------------------------------
+
+
+if [[ "${DISPLAY%%:0*}" != "" ]]; then  
+    HILIT=${red}   # remote machine: prompt will be partly red
+else
+    HILIT=${cyan}  # local machine: prompt will be partly cyan
+fi
+
+#  --> Replace instances of \W with \w in prompt functions below
+#+ --> to get display of full path name.
+
+function fastprompt()
+{
+    unset PROMPT_COMMAND
+    case $TERM in
+        *term | rxvt )
+            PS1="${HILIT}[\h]$NC \W > \[\033]0;\${TERM} [\u@\h] \w\007\]" ;;
+        linux )
+            PS1="${HILIT}[\h]$NC \W > " ;;
+        *)
+            PS1="[\h] \W > " ;;
+    esac
+}
+
+
+_powerprompt()
+{
+	history -a
+	LOAD=$(uptime|sed -e "s/.*: \([^,]*\).*/\1/" -e "s/ //g")
+}
+
+function powerprompt()
+{
+
+    PROMPT_COMMAND=_powerprompt
+    case $TERM in
+        *term | rxvt  )
+            PS1="${HILIT}[\A - \$LOAD]$NC\n[\u@\h \#] \W > \[\033]0;\${TERM} [\u@\h] \w\007\]" ;;
+        linux )
+            PS1="${HILIT}[\A - \$LOAD]$NC\n[\u@\h \#] \W > " ;;
+        * )
+            PS1="[\A - \$LOAD]\n[\u@\h \#] \W > " ;;
+    esac
+}
+
+powerprompt     # This is the default prompt -- might be slow.
+                # If too slow, use fastprompt instead. ...
+
+#===============================================================
+#
+# ALIASES AND FUNCTIONS
+#
+# Arguably, some functions defined here are quite big.
+# If you want to make this file smaller, these functions can
+# be converted into scripts and removed from here.
+#
+# Many functions were taken (almost) straight from the bash-2.04
+# examples.
+#
+#===============================================================
+if [[ -f /usr/local/bin/setup_completeme_key_binding.sh ]]
+then
+
+source  /usr/local/bin/setup_completeme_key_binding.sh
+fi
+#-------------------
+# Personal Aliases
+#-------------------
+alias asstdisplay='xrandr --output DVI-I-2 --rotate right && \ 
+xrandr --output DVI-I-3 --right-of DVI-I-2'
+alias synlink='synergys -n asst1' 
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+# -> Prevents accidentally clobbering files.
+alias mkdir='mkdir -p'
+
+alias h='history'
+alias j='jobs -l'
+alias which='type -a'
+alias ..='cd ..'
+alias path='echo -e ${PATH//:/\\n}'
+alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
+alias print='/usr/bin/lp -o nobanner -d $LPDEST'
+            # Assumes LPDEST is defined (default printer)
+alias pjet='enscript -h -G -fCourier9 -d $LPDEST'
+            # Pretty-print using enscript
+#Sets up a path of directories, link directories to ~/links to make other common directories also available
+CDPATH='.:..:../..:~/links:~'
+alias du='du -kh'       # Makes a more readable output.
+alias df='df -kTh'
+alias s?='$searchcommand'
+alias sin='sudo $installcommand'
+alias sink='sudo $uninstallcommand'
+alias svi='sudo vi'
+alias netboot='ssht netboot.asunix.tufts.edu'
+alias asunix='ssh asunix.tufts.edu'
+alias takemehome='ssh -p52617 jboon@127.0.0.1'
+alias cluster='ssh -CX jboon01@cluster.uit.tufts.edu'
+alias folders='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
+alias diskspace="du -S | sort -n -r |more"
+alias lo='ls -l | sed -e 's/--x/1/g' -e 's/-w-/2/g' -e 's/-wx/3/g' -e 's/r--/4/g' -e 's/r-x/5/g' -e 's/rw-/6/g' -e 's/rwx/7/g' -e 's/---/0/g''  
+function fawk {
+    first="awk '{print "
+    last="}'"
+    cmd="${first}\$${1}${last}"
+    eval $cmd
+}
+
+
+#compare files using comm (requires perl) - http://www.shell-fu.org/lister.php?id=186  
+compare(){  
+  comm $1 $2 | perl -pe 's/^/1: /g;s/1: \t/2: /g;s/2: \t/A: /g;' | sort  
+}  
+  # directory tree - http://www.shell-fu.org/lister.php?id=209  
+alias dirf='find . -type d | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/"'  
+function mkuser(){
+sudo useradd -m -s /bin/bash $*
+sudo passwd $*
+}
+  
+#alias ssht='ssh -CX -R52617:127.0.0.1:22 '
+function ssht(){
+ssh -CXA -R52617:127.0.0.1:22 $* 
+}
+complete -F _known_hosts ssht
+alias slog='sudo tail -f /var/log/syslog'
+#-------------------------------------------------------------
+# The 'ls' family (this assumes you use a recent GNU ls)
+#-------------------------------------------------------------
+#alias ll="ls -l --group-directories-first"
+alias ls='ls -hF --color'  # add colors for filetype recognition
+alias la='ls -Al'          # show hidden files
+alias lx='ls -lXB'         # sort by extension
+alias lk='ls -lSr'         # sort by size, biggest last
+alias lc='ls -ltcr'        # sort by and show change time, most recent last
+alias lu='ls -ltur'        # sort by and show access time, most recent last
+alias lt='ls -ltr'         # sort by date, most recent last
+alias lm='ls -al |more'    # pipe through 'more'
+alias lr='ls -lR'          # recursive ls
+alias tree='tree -Csu'     # nice alternative to 'recursive ls'
+alias deformat='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | sed s~*$~~' #For clearing formatting in ls as necessary
+# If your version of 'ls' doesn't support --group-directories-first try this:
+function ll(){ ls -l "$@"| egrep "^d" ; ls -lXB "$@" 2>&-| \
+                egrep -v "^d|total "; }
+
+
+#-------------------------------------------------------------
+# tailoring 'less'
+#-------------------------------------------------------------
+
+alias more='less'
+export PAGER=less
+#export LESSOPEN='|/usr/bin/lesspipe.sh %s 2>&-'
+   # Use this if lesspipe.sh exists
+export LESS='-i -N -w  -z-4 -g -e -M -X -F -R -P%t?f%f \
+#:stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
+
+
+#-------------------------------------------------------------
+# spelling typos - highly personnal and keyboard-dependent :-)
+#-------------------------------------------------------------
+
+alias xs='cd'
+alias vf='cd'
+alias moer='more'
+alias moew='more'
+alias kk='ll'
+
+
+#-------------------------------------------------------------
+# A few fun ones
+#-------------------------------------------------------------
+
+
+function xtitle()      # Adds some text in the terminal frame.
+{
+    case "$TERM" in
+        *term | rxvt)
+            echo -n -e "\033]0;$*\007" ;;
+        *)  
+            ;;
+    esac
+}
+
+# aliases that use xtitle
+alias top='xtitle Processes on $HOST && top'
+alias make='xtitle Making $(basename $PWD) && make'
+alias ncftp="xtitle ncFTP ; ncftp"
+
+# .. and functions
+#function man()
+#{
+#    for i ; do
+#        xtitle The $(basename $1|tr -d .[:digit:]) manual && command man "$i"
+#    done
+#}
+
+function launch()
+{
+    for i ; do
+        xtitle Running $(basename $1|tr -d .[:digit:])  && module load "$i" && bsub -Ip -q short_all "$i"
+    done
+}
+function scphome()
+{
+    for i ; do
+        xtitle Copying $(basename $1|tr -d .[:digit:])  && scp -r -P 52617 "$i" jboon@127.0.0.1:scp 
+    done
+}
+
+function initializesystem()
+{
+if [ ! -e ~/newsystems.tmp ]
+	then echo "Please create newsystems.tmp and specifiy the systems you would like to test."
+fi
+
+hosts=$( sort < ~/newsystems.tmp | uniq )
+     for i in $hosts ; do
+        if ask "Would you like to initialize and test $i?"
+		then xtitle Initializing $i
+		j=jboon01@$i
+		ssh-copy-id $j
+		if [ "$?" != "0" ]
+			then 
+			echo in loop
+			ssh-copy-id $i
+			j=$i
+		fi   
+		ssh -t $j "sudo ls /"
+		if [ "$?" != "0" ]
+			then 
+			echo Changing Password...
+			ssh -t $j "passwd; sudo ls /"
+			j=$i
+		fi   
+		
+	fi
+    done
+	rm -f ~/newsystems.tmp
+}
+function updatebashrc()
+{
+sort < hosts_with_ids | uniq | sed '/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/d' >| cleanhosts.tmp
+sort < hosts_with_ids | uniq | sed -n '/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/p' >| dirtyhosts.tmp
+dirtyhosts=$(cat ~/dirtyhosts.tmp)    
+	for i in $dirtyhosts ; do
+		if [ -z $( echo $i | sed /@/d) ]
+			then
+				ssh_username=$(echo $i | cut -d'@' -f1)
+				ip=$(echo $i | cut -d'@' -f2| sed s~:~~)
+				ssh_hostname=$(nslookup $ip | grep arpa | sed 's~\.$~~' | cut -d'=' -f2 | sed 's~ ~~')
+				if [ -z $(echo $ssh_hostname | sed /NXDOMAIN/d) ]
+					then
+						echo $ssh_username@$ip: >> cleanhosts.tmp
+					else
+						echo $ssh_username@$ssh_hostname: >> cleanhosts.tmp
+				fi
+			else
+				ip=$(echo $i | cut -d'@' -f2| sed s~:~~)
+				ssh_hostname=$(nslookup $ip | grep arpa | sed 's~\.$~~' | cut -d'=' -f2 | sed 's~ ~~')
+				if [ -z $(echo $ssh_hostname | sed /NXDOMAIN/d) ]
+					then
+						echo $ip: >> cleanhosts.tmp
+					else
+						echo $ssh_hostname: >> cleanhosts.tmp
+				fi
+		fi
+	done;
+hosts=$( sort < cleanhosts.tmp | uniq )
+    for i in $hosts ; do
+        if ask "Would you like to update the .bashrc on $i?"
+		then xtitle Updating .bashrc && scp ~/.bashrc $i 
+	fi
+    done
+	rm -f cleanhosts.tmp
+	rm -f dirtyhosts.tmp
+}
+SSH_ENV="$HOME/.ssh/environment"
+
+function start_agent {
+     echo "Initialising new SSH agent..."
+     /usr/bin/ssh-agent | sed 's/^echo/#echo/' >| "${SSH_ENV}"
+     echo succeeded
+     chmod 600 "${SSH_ENV}"
+     . "${SSH_ENV}" > /dev/null
+     /usr/bin/ssh-add;
+}
+
+# Source SSH settings, if applicable
+
+if [ -f "${SSH_ENV}" ]; then
+     . "${SSH_ENV}" > /dev/null
+     #ps ${SSH_AGENT_PID} doesn't work under cywgin
+     ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+         start_agent;
+     }
+else
+     start_agent;
+fi
+function findsshagent()
+{
+	export SSH_AUTH_SOCK=$(find /tmp -user jboon -iname "agent*" 2>/dev/null)
+}
+function changerename()
+{
+files=$(ls)
+    for i in $files ; do
+	name=$(echo $i | cut -d "." -f1)
+	type=$(echo $i | cut -d "." -f2)
+  mv $i $(echo $name | cut -d "_" -f2 )_$(echo $name | cut -d "_" -f1| sed s~_~~).$type  
+done 
+}
+
+function cleanhosts()
+{
+sort < hosts_with_ids | uniq | sed '/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/d' > cleanhosts.tmp
+sort < hosts_with_ids | uniq | sed -n '/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/p' > dirtyhosts.tmp
+dirtyhosts=$(cat ~/dirtyhosts.tmp)    
+	for i in $dirtyhosts ; do
+		if [ -z $( echo $i | sed /@/d) ]
+			then
+				ssh_username=$(echo $i | cut -d'@' -f1)
+				ip=$(echo $i | cut -d'@' -f2| sed s~:~~)
+				ssh_hostname=$(nslookup $ip | grep arpa | sed 's~\.$~~' | cut -d'=' -f2 | sed 's~ ~~')
+				if [ -z $(echo $ssh_hostname | sed /NXDOMAIN/d) ]
+					then
+						echo $ssh_username@$ip: >> cleanhosts.tmp
+					else
+						echo $ssh_username@$ssh_hostname: >> cleanhosts.tmp
+				fi
+			else
+				ip=$(echo $i | cut -d'@' -f2| sed s~:~~)
+				ssh_hostname=$(nslookup $ip | grep arpa | sed 's~\.$~~' | cut -d'=' -f2 | sed 's~ ~~')
+				if [ -z $(echo $ssh_hostname | sed /NXDOMAIN/d) ]
+					then
+						echo $ip: >> cleanhosts.tmp
+					else
+						echo $ssh_hostname: >> cleanhosts.tmp
+				fi
+		fi
+		cat cleanhosts.tmp | sed s~!:$~:$~
+		rm -f cleanhosts.tmp
+		rm -f dirtyhosts.tmp
+    done
+}
+
+
+#-------------------------------------------------------------
+# Make the following commands run in background automatically:
+#-------------------------------------------------------------
+
+function te()  # Wrapper around xemacs/gnuserv ...
+{
+    if [ "$(gnuclient -batch -eval t 2>&-)" == "t" ]; then
+        gnuclient -q "$@";
+    else
+        ( xemacs "$@" &);
+    fi
+}
+
+function soffice() { command soffice "$@" & }
+function firefox() { command firefox "$@" & }
+function xpdf() { command xpdf "$@" & }
+function vmware() { command vmware "$@" & }
+
+
+#-------------------------------------------------------------
+# File & string-related functions:
+#-------------------------------------------------------------
+
+
+# Find a file with a pattern in name:
+function ff() { find . -type f -iname '*'$*'*' -ls ; }
+
+# Find a file with pattern $1 in name and Execute $2 on it:
+function fe()
+{ find . -type f -iname '*'${1:-}'*' -exec ${2:-file} {} \;  ; }
+
+# Find a pattern in a set of files and highlight them:
+# (needs a recent version of egrep)
+function fstr()
+{
+    OPTIND=1
+    local case=""
+    local usage="fstr: find string in files.
+Usage: fstr [-i] \"pattern\" [\"filename pattern\"] "
+    while getopts :it opt
+    do
+        case "$opt" in
+        i) case="-i " ;;
+        *) echo "$usage"; return;;
+        esac
+    done
+    shift $(( $OPTIND - 1 ))
+    if [ "$#" -lt 1 ]; then
+        echo "$usage"
+        return;
+    fi
+    find . -type f -name "${2:-*}" -print0 | \
+    xargs -0 egrep --color=always -sn ${case} "$1" 2>&- | more 
+
+}
+
+function cuttail() # cut last n lines in file, 10 by default
+{
+    nlines=${2:-10}
+    sed -n -e :a -e "1,${nlines}!{P;N;D;};N;ba" $1
+}
+
+function lowercase()  # move filenames to lowercase
+{
+    for file ; do
+        filename=${file##*/}
+        case "$filename" in
+        */*) dirname==${file%/*} ;;
+        *) dirname=.;;
+        esac
+        nf=$(echo $filename | tr A-Z a-z)
+        newname="${dirname}/${nf}"
+        if [ "$nf" != "$filename" ]; then
+            mv "$file" "$newname"
+            echo "lowercase: $file --> $newname"
+        else
+            echo "lowercase: $file not changed."
+        fi
+    done
+}
+
+
+function swap()  # Swap 2 filenames around, if they exist
+{                #(from Uzi's bashrc).
+    local TMPFILE=tmp.$$ 
+
+    [ $# -ne 2 ] && echo "swap: 2 arguments needed" && return 1
+    [ ! -e $1 ] && echo "swap: $1 does not exist" && return 1
+    [ ! -e $2 ] && echo "swap: $2 does not exist" && return 1
+
+    mv "$1" $TMPFILE 
+    mv "$2" "$1"
+    mv $TMPFILE "$2"
+}
+
+function extract()      # Handy Extract Program.
+{
+     if [ -f $1 ] ; then
+         case $1 in
+             *.tar.bz2)   tar xvjf $1     ;;
+             *.tar.gz)    tar xvzf $1     ;;
+             *.bz2)       bunzip2 $1      ;;
+             *.rar)       unrar x $1      ;;
+             *.gz)        gunzip $1       ;;
+             *.tar)       tar xvf $1      ;;
+             *.tbz2)      tar xvjf $1     ;;
+             *.tgz)       tar xvzf $1     ;;
+             *.zip)       unzip $1        ;;
+             *.Z)         uncompress $1   ;;
+             *.7z)        7z x $1         ;;
+             *)           echo "'$1' cannot be extracted via >extract<" ;;
+         esac
+     else
+         echo "'$1' is not a valid file"
+     fi
+}
+
+#-------------------------------------------------------------
+# Process/system related functions:
+#-------------------------------------------------------------
+
+
+function my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
+function pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
+
+
+function killps()                 # Kill by process name.
+{
+    local pid pname sig="-TERM"   # Default signal.
+    if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
+        echo "Usage: killps [-SIGNAL] pattern"
+        return;
+    fi
+    if [ $# = 2 ]; then sig=$1 ; fi
+    for pid in $(my_ps| awk '!/awk/ && $0~pat { print $1 }' pat=${!#} ) ; do
+        pname=$(my_ps | awk '$1~var { print $5 }' var=$pid )
+        if ask "Kill process $pid <$pname> with signal $sig?"
+            then kill $sig $pid
+        fi
+    done
+}
+
+function my_ip() # Get IP adresses.
+{
+    MY_IP=$(/sbin/ifconfig eth0 | awk '/inet/ { print $2 } ' | \
+sed -e s/addr://)
+#    MY_ISP=$(/sbin/ifconfig ppp0 | awk '/P-t-P/ { print $3 } ' | \
+#sed -e s/P-t-P://)
+}
+
+function ii()   # Get current host related info.
+{
+    echo -e "\nYou are logged on ${RED}$HOST"
+    echo -e "\nAdditional information:$NC " ; uname -a  
+	echo -e "\n${RED}Distro:$NC " ; cat /etc/issue
+    echo -e "\n${RED}Users logged on:$NC " ; w -h
+    echo -e "\n${RED}Current date :$NC " ; date
+    echo -e "\n${RED}Machine stats :$NC " ; uptime
+    echo -e "\n${RED}Memory stats :$NC " ; free -m
+	my_ip
+    echo -e "\n${RED}Local IP Address :$NC" ; echo ${MY_IP:-"Not connected"}
+#    echo -e "\n${RED}Secondary Address :$NC" ; echo ${MY_ISP:-"Not connected"}
+    echo -e "\n${RED}Open connections :$NC "; netstat -pan --inet;
+    echo
+}
+
+#-------------------------------------------------------------
+# Misc utilities:
+#-------------------------------------------------------------
+
+function repeat()       # Repeat n times command.
+{
+    local i max
+    max=$1; shift;
+    for ((i=1; i <= max ; i++)); do  # --> C-like syntax
+        eval "$@";
+    done
+}
+
+
+function ask()          # See 'killps' for example of use.
+{
+    echo -n "$@" '[y/n] ' ; read ans
+    case "$ans" in
+        y*|Y*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+function corename()   # Get name of app that created a corefile.
+{ 
+    for file ; do
+        echo -n $file : ; gdb --core=$file --batch | head -1
+    done 
+}
+#=========================================================================
+# PROGRAMMABLE COMPLETION - ONLY SINCE BASH-2.04
+# Most are taken from the bash 2.05 documentation and from Ian McDonald's
+# 'Bash completion' package (http://www.caliban.org/bash/#completion).
+# You will in fact need bash more recent than 3.0 for some features.
+#=========================================================================
+
+if [ "${BASH_VERSION%.*}" \< "3.0" ]; then
+    echo "You will need to upgrade to version 3.0 \
+for full programmable completion features."
+    return
+fi
+
+shopt -s extglob         # Necessary,
+#set +o nounset          # otherwise some completions will fail.
+
+complete -A hostname   rsh rcp telnet rlogin r ftp ping disk
+complete -A export     printenv
+complete -A variable   export local readonly unset
+complete -A enabled    builtin
+complete -A alias      alias unalias
+complete -A function   function
+complete -A user       su mail finger
+
+complete -A helptopic  help     # Currently, same as builtins.
+complete -A shopt      shopt
+complete -A stopped -P '%' bg
+complete -A job -P '%'     fg jobs disown
+
+complete -A directory  mkdir rmdir
+complete -A directory   -o default cd
+
+complete -f -o default -X '!*.pl'  perl perl5
+
+
+# This is a 'universal' completion function - it works when commands have
+# a so-called 'long options' mode , ie: 'ls --all' instead of 'ls -a'
+# Needs the '-o' option of grep
+#  (try the commented-out version if not available).
+
+# First, remove '=' from completion word separators
+# (this will allow completions like 'ls --color=auto' to work correctly).
+
+COMP_WORDBREAKS=${COMP_WORDBREAKS/=/}
+
+
+_get_longopts() 
+{ 
+    #$1 --help | sed  -e '/--/!d' -e 's/.*--\([^[:space:].,]*\).*/--\1/'| \
+#grep ^"$2" |sort -u ;
+    $1 --help | grep -o -e "--[^[:space:].,]*" | grep -e "$2" |sort -u 
+}
+
+_longopts()
+{
+    local cur
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    case "${cur:-*}" in
+       -*)      ;;
+        *)      return ;;
+    esac
+
+    case "$1" in
+      \~*)      eval cmd="$1" ;;
+        *)      cmd="$1" ;;
+    esac
+    COMPREPLY=( $(_get_longopts ${1} ${cur} ) )
+}
+complete  -o default -F _longopts configure bash
+complete  -o default -F _longopts wget id info a2ps ls recode
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
+if [ "$PS1" != "" -a "${STARTED_SCREEN:-x}" = x  -a "${SSH_TTY:-x}" != x -a "$(hostname)" != "HFMENGPC2" ]
+then
+STARTED_SCREEN=1 ; export STARTED_SCREEN
+[ -d $HOME/lib/screen-logs ] || mkdir -p $HOME/lib/screen-logs
+
+sleep 1
+screen -d -R && exit 0
+
+echo "Screen failed! continuing with normal bash startup"
+fi
+
