@@ -1,4 +1,4 @@
-[ ! -d ~/dotfiles] && git clone git@github.com:joshboon/dotfiles.git
+[ ! -d ""~/dotfiles" ] && git clone git@github.com:joshboon/dotfiles.git
 cd dotfiles
 git pull
 stow bash
