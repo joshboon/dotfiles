@@ -6,6 +6,7 @@ stow bash
 stow vim
 [ ! -d "~/.git" ] && rm -rf .git*
 stow git
+stow screen
 cd ~
 bind -f ~/.inputrc
 source .bashrcfinal
