@@ -287,7 +287,7 @@ alias cp='cp -i'
 alias mv='mv -i'
 # -> Prevents accidentally clobbering files.
 alias mkdir='mkdir -p'
-alias hbig='du --max-depth=1 -h'
+
 alias h='history'
 alias j='jobs -l'
 alias which='type -a'
