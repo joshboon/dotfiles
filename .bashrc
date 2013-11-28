@@ -1,14 +1,14 @@
 [ -z "$PS1" ] && return
-[ -e "~/dotfiles" ] || git clone git@github.com:joshboon/dotfiles.git
+[ -e "$HOME/dotfiles" ] || git clone git@github.com:joshboon/dotfiles.git
 cd dotfiles
 git pull
-[ -e "~/.inputrc" ] && rm -rf ~/.inputrc
+[ -e "$HOME/.inputrc" ] && rm -rf $HOME/.inputrc
 stow bash
-[ -e "~/.vim" ] && rm -rf ~/.vim*
+[ -e "$HOME/.vim" ] && rm -rf $HOME/.vim*
 stow vim
-[ -e "~/.git" ] && rm -rf ~/.git*
+[ -e "$HOME/.git" ] && rm -rf $HOME/.git*
 stow git
 stow screen
-cd ~
-bind -f ~/.inputrc
+cd $HOME
+bind -f $HOME/.inputrc
 source .bashrcfinal
