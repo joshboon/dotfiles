@@ -127,15 +127,17 @@ endif " has("autocmd")
 "    F6   -  close quickfix error window
 "    F7   -  display previous error
 "    F8   -  display next error   
+"    F9   -  toggle paste   
 "-------------------------------------------------------------------------------
 "
 map   <silent> <F2>        :write<CR>
 map   <silent> <F3>        :Explore<CR>
-nmap  <silent> <F4>        :exe ":ptag ".expand("<cword>")<CR>
+map  <silent> <F4>        :exe ":ptag ".expand("<cword>")<CR>
 map   <silent> <F5>        :copen<CR>
 map   <silent> <F6>        :cclose<CR>
 map   <silent> <F7>        :cp<CR>
 map   <silent> <F8>        :cn<CR>
+map   <silent> <F9>        :cn<CR>
 "
 imap  <silent> <F2>   <Esc>:write<CR>
 imap  <silent> <F3>   <Esc>:Explore<CR>
@@ -144,6 +146,9 @@ imap  <silent> <F5>   <Esc>:copen<CR>
 imap  <silent> <F6>   <Esc>:cclose<CR>
 imap  <silent> <F7>   <Esc>:cp<CR>
 imap  <silent> <F8>   <Esc>:cn<CR>
+nnoremap <F2> :set invpaste paste?<CR>
+set pastetoggle=<F2>
+set showmode
 "-------------------------------------------------------------------------------
 " autocomplete parenthesis, brackets and braces
 "-------------------------------------------------------------------------------
