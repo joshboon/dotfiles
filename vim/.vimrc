@@ -146,8 +146,8 @@ imap  <silent> <F5>   <Esc>:copen<CR>
 imap  <silent> <F6>   <Esc>:cclose<CR>
 imap  <silent> <F7>   <Esc>:cp<CR>
 imap  <silent> <F8>   <Esc>:cn<CR>
-nnoremap <F2> :set invpaste paste?<CR>
-set pastetoggle=<F2>
+nnoremap <F9> :set invpaste paste?<CR>
+set pastetoggle=<F9>
 set showmode
 "-------------------------------------------------------------------------------
 " autocomplete parenthesis, brackets and braces
