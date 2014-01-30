@@ -30,15 +30,13 @@ if [ "$distro" = "Ubuntu" ]
 				installcommand='apt-get -y install'
 				uninstallcommand='apt-get purge'
 				[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-        else
-                if [ "$distro" = (Fedora|Red) ]
+        elif [[ "$distro" =~ (Fedora|Red) ]]
                         then
 								echo "Setting up for a RHS shell..."
                                 searchcommand='yum search'
                                 installcommand='yum install '
                                 uninstallcommand='yum remove '
 																[ -x /usr/bin/lesspipe.sh ] && export LESSOPEN="||/usr/bin/lesspipe.sh %s"
-		fi
 fi
 
 # enable programmable completion features (you don't need to enable
