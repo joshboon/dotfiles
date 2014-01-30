@@ -9,7 +9,6 @@
 "===================================================================================
 " GENERAL SETTINGS
 "===================================================================================
-
 "-------------------------------------------------------------------------------
 " Use Vim settings, rather then Vi settings.
 " This must be first, because it changes other options as a side effect.
@@ -47,6 +46,12 @@ endif
 "   find  $HOME/.vim.backupdir -name "*" -type f -mtime +60 -exec rm -f {} \;
 " in one of your shell startup files (e.g. $HOME/.profile)
 "
+" No pollute with swap and backups
+" Use home to in case of secure data
+set bdir-=.
+set bdir+=~/tmp
+set dir-=.
+set dir+=~/tmp
 "-------------------------------------------------------------------------------
 " Various settings
 "-------------------------------------------------------------------------------
@@ -61,7 +66,7 @@ set history=50                  " keep 50 lines of command line history
 set hlsearch                    " highlight the last used search pattern
 set incsearch                   " do incremental searching
 set listchars=tab:>.,eol:\$     " strings to use in 'list' mode
-set mouse=a                     " enable the use of the mouse
+set mouse-=a                     " Mice make me angry
 set nowrap                      " do not wrap lines
 set popt=left:8pc,right:3pc     " print options
 set ruler                       " show the cursor position all the time
@@ -137,7 +142,7 @@ map   <silent> <F5>        :copen<CR>
 map   <silent> <F6>        :cclose<CR>
 map   <silent> <F7>        :cp<CR>
 map   <silent> <F8>        :cn<CR>
-map   <silent> <F9>        :cn<CR>
+"#map   <silent> <F9>        :cn<CR>
 "
 imap  <silent> <F2>   <Esc>:write<CR>
 imap  <silent> <F3>   <Esc>:Explore<CR>
@@ -146,7 +151,7 @@ imap  <silent> <F5>   <Esc>:copen<CR>
 imap  <silent> <F6>   <Esc>:cclose<CR>
 imap  <silent> <F7>   <Esc>:cp<CR>
 imap  <silent> <F8>   <Esc>:cn<CR>
-nnoremap <F9> :set invpaste paste?<CR>
+"nnoremap <F9> :set invpaste paste?<CR>
 set pastetoggle=<F9>
 set showmode
 "-------------------------------------------------------------------------------

@@ -1,4 +1,48 @@
 =======================================================================================
+  RELEASE NOTES FOR VERSION 4.1
+=======================================================================================
+
+- Filetype plugin added.
+- Bugfix: Setup of local templates in case of global installation.
+- Adjusting end-of-line comments improved.
+- Submenu 'Regexp' renamed to 'PatternMatching'. Appropriate hotkeys renamed.
+- Minor bugfixes.
+- Documentation updated.
+
+=======================================================================================
+  RELEASE NOTES FOR VERSION 4.0
+=======================================================================================
+
+  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  ++  The plug-in version 4.0+ is a rewriting of version 3.12.1.              ++
+  ++  The versions 4.0+ are based on a new and more powerful template system  ++
+  ++  (please see ":help template-support" for more information).             ++
+  ++  The template syntax has changed!                                        ++
+  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+- New template system (many thanks to Wolfgang Mehner)
+- A few new hotkeys and menu item.
+- A few hotkeys and menu items renamed.
+- Footer did not appear in doc/bash-hotkeys.pdf
+
+=======================================================================================
+  RELEASE NOTES FOR VERSION 3.12.1
+=======================================================================================
+- Minor additions and bugfixes in 2 menus.
+- Test -v added.
+
+=======================================================================================
+  RELEASE NOTES FOR VERSION 3.12
+=======================================================================================
+- New global variable g:BASH_InsertFileHeader (suppress file description comment for new files)
+- New menu item 'view code snippet' (\nv).
+- New ex command BASH_ScriptCmdLineArguments.
+- 3 ex commands renamed.
+- Minor internal improvements.
+
+=======================================================================================
   RELEASE NOTES FOR VERSION 3.11
 =======================================================================================
 - Rendering of manuals (\hm) and Bash help (\hh).
