@@ -2,11 +2,11 @@
 §  User Macros
 § =============================================================
 
-SetMacro( 'AUTHOR',      'YOUR NAME' )
-SetMacro( 'AUTHORREF',   '' )
+SetMacro( 'AUTHOR',      'Josh Boon' )
+SetMacro( 'AUTHORREF',   'JCB' )
 SetMacro( 'COMPANY',     '' )
 SetMacro( 'COPYRIGHT',   '' )
-SetMacro( 'EMAIL',       '' )
+SetMacro( 'EMAIL',       'alwayscurious@joshboon.com,josh@nutraclick.com' )
 SetMacro( 'LICENSE',     '' )
 SetMacro( 'ORGANIZATION','' )
 
