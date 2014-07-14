@@ -3,10 +3,13 @@ case $- in
     *i*) ;;
       *) return;;
 esac
-HOME=/home/$( who am i)
-if [ -e "$HOME/dotfiles" && ! "$(whoami)" = "root" ] 
+USER=$(who am i | awk '{ print $1}')
+HOME=/home/$USER
+if [[ ! -d "$HOME/dotfiles" &&  "$(whoami)" = "$USER" ]]
 then
 git clone git@github.com:joshboon/dotfiles.git
+elif [[ ! "$(whoami)" = "root" ]] 
+then
 cd dotfiles
 git pull
 [ -e "$HOME/.inputrc" ] && rm -rf $HOME/.inputrc
@@ -16,11 +19,7 @@ stow vim
 [ -e "$HOME/.git" ] && rm -rf $HOME/.git*
 stow git
 stow screen
+fi
 cd $HOME
 bind -f $HOME/.inputrc
 source .bashrcfinal
-elif
-then
-bind -f $HOME/.inputrc
-source .bashrcfinal
-fi
