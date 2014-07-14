@@ -1,5 +1,12 @@
-[ -z "$PS1" ] && return
-[ -e "$HOME/dotfiles" ] || git clone git@github.com:joshboon/dotfiles.git
+#catch non interactive and bail
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+HOME=/home/$( who am i)
+if [ -e "$HOME/dotfiles" && ! "$(whoami)" = "root" ] 
+then
+git clone git@github.com:joshboon/dotfiles.git
 cd dotfiles
 git pull
 [ -e "$HOME/.inputrc" ] && rm -rf $HOME/.inputrc
@@ -12,3 +19,8 @@ stow screen
 cd $HOME
 bind -f $HOME/.inputrc
 source .bashrcfinal
+elif
+then
+bind -f $HOME/.inputrc
+source .bashrcfinal
+fi

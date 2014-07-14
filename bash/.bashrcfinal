@@ -45,36 +45,36 @@ fi
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
+# This looks to be busted.  
+# function get_xserver ()
+# {
+#     case $TERM in
+#        xterm )
+#             XSERVER=$(who am i | awk '{print $NF}' | tr -d ')''(' ) 
+#             # Ane-Pieter Wieringa suggests the following alternative:
+#             # I_AM=$(who am i)
+#             # SERVER=${I_AM#*(}
+#             # SERVER=${SERVER%*)}
+# 
+#             XSERVER=${XSERVER%%:*}
+#             ;;
+#         aterm | rxvt)
+#         # Find some code that works here. ...
+#             ;;
+#     esac  
+# }
+# 
+# if [ -z ${DISPLAY:=""} ]; then
+#     get_xserver
+#     if [[ -z ${XSERVER}  || ${XSERVER} == $(hostname) || \
+#       ${XSERVER} == "unix" ]]; then 
+#         DISPLAY=":0.0"          # Display on local host.
+#     else
+#         DISPLAY=${XSERVER}:0.0  # Display on remote host.
+#     fi
+# fi
 
-function get_xserver ()
-{
-    case $TERM in
-       xterm )
-            XSERVER=$(who am i | awk '{print $NF}' | tr -d ')''(' ) 
-            # Ane-Pieter Wieringa suggests the following alternative:
-            # I_AM=$(who am i)
-            # SERVER=${I_AM#*(}
-            # SERVER=${SERVER%*)}
-
-            XSERVER=${XSERVER%%:*}
-            ;;
-        aterm | rxvt)
-        # Find some code that works here. ...
-            ;;
-    esac  
-}
-
-if [ -z ${DISPLAY:=""} ]; then
-    get_xserver
-    if [[ -z ${XSERVER}  || ${XSERVER} == $(hostname) || \
-      ${XSERVER} == "unix" ]]; then 
-        DISPLAY=":0.0"          # Display on local host.
-    else
-        DISPLAY=${XSERVER}:0.0  # Display on remote host.
-    fi
-fi
-
-export DISPLAY
+# export DISPLAY
 PATH=$PATH:/usr/local/scripts
 export PATH
 #-------------------------------------------------------------
