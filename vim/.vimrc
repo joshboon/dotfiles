@@ -64,6 +64,7 @@ set browsedir=current           " which directory to use for the file browser
 set complete+=k                 " scan the files given with the 'dictionary' option
 set history=50                  " keep 50 lines of command line history
 set hlsearch                    " highlight the last used search pattern
+set expandtab                    " Get retab to change tabs to spaces
 set incsearch                   " do incremental searching
 set listchars=tab:>.,eol:\$     " strings to use in 'list' mode
 set mouse-=a                     " Mice make me angry
