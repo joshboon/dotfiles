@@ -8,6 +8,13 @@ HOME=/home/$USER
 if [[ ! -d "$HOME/dotfiles" &&  "$(whoami)" = "$USER" ]]
 then
 git clone git@github.com:joshboon/dotfiles.git
+[ -e "$HOME/.inputrc" ] && rm -rf $HOME/.inputrc
+stow bash
+[ -e "$HOME/.vim" ] && rm -rf $HOME/.vim*
+stow vim
+[ -e "$HOME/.git" ] && rm -rf $HOME/.git*
+stow git
+stow screen
 elif [[ ! "$(whoami)" = "root" ]] 
 then
 cd dotfiles
@@ -19,6 +26,7 @@ stow vim
 [ -e "$HOME/.git" ] && rm -rf $HOME/.git*
 stow git
 stow screen
+cp -u .bashrc $HOME/
 fi
 cd $HOME
 bind -f $HOME/.inputrc
