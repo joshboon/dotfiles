@@ -115,6 +115,7 @@ export LPDEST=MFC-8480DN
 export EDITOR=vim
 export DEBFULLNAME="Josh Boon"
 export DEBEMAIL="alwayscurious@joshboon.com"
+export TERM=xterm-256color
 #-------------------------------------------------------------
 # Greeting, motd etc...
 #-------------------------------------------------------------
@@ -244,10 +245,7 @@ alias s?='$searchcommand'
 alias sin='sudo $installcommand'
 alias sink='sudo $uninstallcommand'
 alias svi='sudo vi'
-alias netboot='ssht netboot.asunix.tufts.edu'
-alias asunix='ssh asunix.tufts.edu'
 alias takemehome='ssh -p52617 jboon@127.0.0.1'
-alias cluster='ssh -CX jboon01@cluster.uit.tufts.edu'
 alias folders='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
 alias diskspace="du -S | sort -n -r |more"
 alias lo='ls -l | sed -e 's/--x/1/g' -e 's/-w-/2/g' -e 's/-wx/3/g' -e 's/r--/4/g' -e 's/r-x/5/g' -e 's/rw-/6/g' -e 's/rwx/7/g' -e 's/---/0/g''  
@@ -296,7 +294,19 @@ alias deformat='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | sed s~*$~
 function ll(){ ls -l "$@"| egrep "^d" ; ls -lXB "$@" 2>&-| \
                 egrep -v "^d|total "; }
 
+#---
+# Make JIRA fun! (lies.)
+#---
 
+function jiratransition(){
+# This will take an issue show you transitions and then transiton
+jirash transitions $1
+read -p "Please provide the transition number" TRANSID
+echo "Please provide a comment. jira markdown supported. end ctrl-d"
+TRANSCOMM=$(</dev/stdin)
+jirash transition $1 $TRANSID -c "$TRANSCOMM"
+}
+alias jt='jiratransition'
 #-------------------------------------------------------------
 # tailoring 'less'
 #-------------------------------------------------------------
@@ -391,6 +401,7 @@ hosts=$( sort < ~/newsystems.tmp | uniq )
     done
 	rm -f ~/newsystems.tmp
 }
+
 function updatebashrc()
 {
 sort < hosts_with_ids | uniq | sed '/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/d' >| cleanhosts.tmp
@@ -431,7 +442,7 @@ hosts=$( sort < cleanhosts.tmp | uniq )
 SSH_ENV="$HOME/.ssh/environment"
 
 function start_agent {
-      if [ "$USER" != "root" ]; then
+if [ $(whoami) != "root" ]; then
      echo "Initialising new SSH agent..."
      /usr/bin/ssh-agent | sed 's/^echo/#echo/' >| "${SSH_ENV}"
      echo succeeded
@@ -777,7 +788,10 @@ STARTED_SCREEN=1 ; export STARTED_SCREEN
 [ -d $HOME/lib/screen-logs ] || mkdir -p $HOME/lib/screen-logs
 
 sleep 1
+if [ ! -e /home/$USER/.noscreen ]
+then
 screen -d -R && exit 0
+fi
 
 echo "Screen failed! continuing with normal bash startup"
 fi
