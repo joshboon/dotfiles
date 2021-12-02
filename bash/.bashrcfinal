@@ -467,7 +467,7 @@ else
 fi
 function findsshagent()
 {
-	export SSH_AUTH_SOCK=$(find /tmp -user jboon -iname "agent*" 2>/dev/null)
+	export SSH_AUTH_SOCK=$(find /tmp -user $USER -iname "agent*" 2>/dev/null)
 }
 function changerename()
 {
