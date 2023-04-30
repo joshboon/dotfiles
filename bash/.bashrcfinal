@@ -323,11 +323,6 @@ export PAGER=less
 # spelling typos - highly personnal and keyboard-dependent :-)
 #-------------------------------------------------------------
 
-alias xs='cd'
-alias vf='cd'
-alias moer='more'
-alias moew='more'
-alias kk='ll'
 
 
 #-------------------------------------------------------------
@@ -468,6 +463,11 @@ fi
 function findsshagent()
 {
 	export SSH_AUTH_SOCK=$(find /tmp -user $USER -iname "agent*" 2>/dev/null)
+}
+# builds a regex based on awk field. 
+function grx()
+{
+awk "{ print \$${1} }"   | tr '\n' '|' | sed -e 's~^~(~' -e 's~|$~)\n~'
 }
 function changerename()
 {

@@ -1,3 +1,5 @@
 [user]
 	name = Josh Boon
 	email = alwayscurious@joshboon.com
+[core]
+  autocrlf = false
