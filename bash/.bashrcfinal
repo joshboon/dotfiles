@@ -465,6 +465,10 @@ function findsshagent()
 	export SSH_AUTH_SOCK=$(find /tmp -user $USER -iname "agent*" 2>/dev/null)
 }
 # builds a regex based on awk field. 
+function grxu()
+{
+awk "{ print \$${1} }"   | sort | uniq | tr '\n' '|' | sed -e 's~^~(~' -e 's~|$~)\n~'
+}
 function grx()
 {
 awk "{ print \$${1} }"   | tr '\n' '|' | sed -e 's~^~(~' -e 's~|$~)\n~'
