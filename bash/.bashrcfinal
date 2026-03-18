@@ -136,7 +136,7 @@ echo -e "${CYAN}This is BASH ${RED}${BASH_VERSION%.*}\
 ${CYAN} - DISPLAY on ${RED}$DISPLAY${NC}\n"
 date
 if [ -x /usr/games/fortune ]; then
-    /usr/games/fortune   cookie definitions 10%riddles 10%off fortunes 7%riddles 7%linux 7%humorists 10%eo 5%men-women 7%wisdom 5%work 5%knghtbrd     # Makes our day a bit more fun.... :-)
+    /usr/games/fortune -a   
 fi
 
 function _exit()        # Function to run upon exit of shell.
