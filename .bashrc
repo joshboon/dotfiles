@@ -30,4 +30,5 @@ cp -u .bashrc $HOME/
 fi
 cd $HOME
 bind -f $HOME/.inputrc
+source .localenv
 source .bashrcfinal
