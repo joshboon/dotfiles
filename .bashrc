@@ -3,7 +3,7 @@ case $- in
     *i*) ;;
       *) return;;
 esac
-USER=$(who am i | awk '{ print $1}')
+USER=$(whoami)
 HOME=/home/$USER
 if [[ ! -d "$HOME/dotfiles" &&  "$(whoami)" = "$USER" ]]
 then
