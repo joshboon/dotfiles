@@ -179,6 +179,7 @@ _powerprompt()
 {
 	history -a
 	LOAD=$(uptime|sed -e "s/.*: \([^,]*\).*/\1/" -e "s/ //g")
+	JIRA=$(cat ~/.jiratask )
 }
 
 function powerprompt()
@@ -187,11 +188,11 @@ function powerprompt()
     PROMPT_COMMAND=_powerprompt
     case $TERM in
         *term | rxvt  )
-            PS1="${HILIT}[\A - \$LOAD]$NC\n[\u@\h \#] \W > \[\033]0;\${TERM} [\u@\h] \w\007\]" ;;
+            PS1="${HILIT}[\A - \$LOAD \$JIRA]$NC\n[\u@\h \#] \W > \[\033]0;\${TERM} [\u@\h] \w\007\]" ;;
         linux )
-            PS1="${HILIT}[\A - \$LOAD]$NC\n[\u@\h \#] \W > " ;;
+            PS1="${HILIT}[\A - \$LOAD \$JIRA]$NC\n[\u@\h \#] \W > " ;;
         * )
-            PS1="[\A - \$LOAD]\n[\u@\h \#] \W > " ;;
+            PS1="[\A - \$LOAD \$JIRA ]\n[\u@\h \#] \W > " ;;
     esac
 }
 
