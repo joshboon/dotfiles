@@ -1,4 +1,8 @@
-"\e[A": history-search-backward
-"\e[B": history-search-forward
+# Respect default shortcuts.
+$include /etc/inputrc
+## arrow up
+"\e[A":history-search-backward
+## arrow down
+"\e[B":history-search-forward
 set show-all-if-ambiguous on
-set completion-ignore-case on]"]"
+set completion-ignore-case on
