@@ -3,7 +3,7 @@ case $- in
     *i*) ;;
       *) return;;
 esac
-USER=$(who am i | awk '{ print $1}')
+USER=$(whoami)
 HOME=/home/$USER
 if [[ ! -d "$HOME/dotfiles" &&  "$(whoami)" = "$USER" ]]
 then
@@ -30,4 +30,5 @@ cp -u .bashrc $HOME/
 fi
 cd $HOME
 bind -f $HOME/.inputrc
+source .localenv
 source .bashrcfinal

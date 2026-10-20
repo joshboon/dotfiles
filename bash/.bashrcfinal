@@ -136,7 +136,7 @@ echo -e "${CYAN}This is BASH ${RED}${BASH_VERSION%.*}\
 ${CYAN} - DISPLAY on ${RED}$DISPLAY${NC}\n"
 date
 if [ -x /usr/games/fortune ]; then
-    /usr/games/fortune   cookie definitions 10%riddles 10%off fortunes 7%riddles 7%linux 7%humorists 10%eo 5%men-women 7%wisdom 5%work 5%knghtbrd     # Makes our day a bit more fun.... :-)
+    /usr/games/fortune -a   
 fi
 
 function _exit()        # Function to run upon exit of shell.
@@ -179,6 +179,7 @@ _powerprompt()
 {
 	history -a
 	LOAD=$(uptime|sed -e "s/.*: \([^,]*\).*/\1/" -e "s/ //g")
+	JIRA=$(cat ~/.jiratask )
 }
 
 function powerprompt()
@@ -187,11 +188,11 @@ function powerprompt()
     PROMPT_COMMAND=_powerprompt
     case $TERM in
         *term | rxvt  )
-            PS1="${HILIT}[\A - \$LOAD]$NC\n[\u@\h \#] \W > \[\033]0;\${TERM} [\u@\h] \w\007\]" ;;
+            PS1="${HILIT}[\A - \$LOAD \$JIRA]$NC\n[\u@\h \#] \W > \[\033]0;\${TERM} [\u@\h] \w\007\]" ;;
         linux )
-            PS1="${HILIT}[\A - \$LOAD]$NC\n[\u@\h \#] \W > " ;;
+            PS1="${HILIT}[\A - \$LOAD \$JIRA]$NC\n[\u@\h \#] \W > " ;;
         * )
-            PS1="[\A - \$LOAD]\n[\u@\h \#] \W > " ;;
+            PS1="[\A - \$LOAD \$JIRA ]\n[\u@\h \#] \W > " ;;
     esac
 }
 
